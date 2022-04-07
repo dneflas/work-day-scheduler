@@ -48,51 +48,68 @@ var events = [
     },
 ];
 
-
-
 // load current date at the top of the page
 var today = moment().format("dddd, MMMM Do");
 $("#currentDay").text(today);
 
 // loadEvents function - pull from array from local storage
+var loadEvents = function(){
+    storedEvents = JSON.parse(localStorage.getItem("events"));
+
+    if(!storedEvents) {
+        storedEvents = events;
+    };
+
+    createTimeblock(storedEvents);
+}
 
 // create timeblock elements
-for (var i = 0; i< events.length; i++){
-    var timeBlockEl = $("<div>")
-        .addClass("row time-block");
+var createTimeblock = function(arr){
+    for (var i = 0; i< arr.length; i++){
+        var timeBlockEl = $("<div>")
+            .addClass("row time-block");
 
-    var hourEl = $("<div>")
-        .addClass("col-1 hour")
-        .text(events[i].time);
+        var hourEl = $("<div>")
+            .addClass("col-1 hour")
+            .text(arr[i].time);
 
-    var descriptionEl = $("<textarea>")
-        .addClass("col-10 description")
-        .text(events[i].description)
-       
-        var hour = moment(events[i].time, "hA").hour();
+        var descriptionEl = $("<textarea>")
+            .addClass("col-10 description")
+            .text(arr[i].description)
 
-        if (now > hour){
-            descriptionEl.addClass("past");
-        } else if (now === hour){
-            descriptionEl.addClass("present");
-        } else {
-            descriptionEl.addClass("future");
-        };
+            var hour = moment(arr[i].time, "hA").hour();
+            descriptionEl.removeClass("past present future");
 
-    var saveBtnEl = $("<button>")
-        .addClass("col-1 saveBtn")
-        .html("<i class='fas fa-save'></i>")
+            if (now > hour){
+                descriptionEl.addClass("past");
+            } else if (now === hour){
+                descriptionEl.addClass("present");
+            } else {
+                descriptionEl.addClass("future");
+            };
+        
+        var saveBtnEl = $("<button>")
+            .addClass("col-1 saveBtn")
+            .html("<i class='fas fa-save'></i>")
 
-    timeBlockEl.append(hourEl, descriptionEl, saveBtnEl);
-    $(".container").append(timeBlockEl);
+        timeBlockEl.append(hourEl, descriptionEl, saveBtnEl);
+        $(".container").append(timeBlockEl);
+    };
 };
 
 // saveEvent function - save to local storage
+var saveEventHandler = function(){
+    localStorage.setItem("storedEvents", JSON.stringify(storedEvents));
+    console.log("saved to local storage")
+}
 
 // auditEvent function - add class to change background color (past, present, future)
 
+
 // event listener for saveBtn to run saveEvent
+$(".container").on("click", ".saveBtn", saveEventHandler);
 
 // timeInterval - to auditEvent every hour (1000* 60 * 60)
 
 //call loadEvent for the first time
+loadEvents();
