@@ -1,71 +1,83 @@
+var now = moment().hour();
+console.log(now);
+
 var events = [
     {
-        "id":"9",
-        "time": moment().set("hour", 9).set("minute", 0).set("second", 0).format("hA"),
+        "time": moment().hour(9).format("hA"),
         "description":""
     },
     {
-        "id":"10",
-        "time": moment().set("hour", 10).set("minute", 0).set("second", 0).format("hA"),
+        "time": moment().hour(10).format("hA"),
         "description":""
 
     },
     {
-        "id":"11",
-        "time": moment().set("hour", 11).set("minute", 0).set("second", 0).format("hA"),
+        "time": moment().hour(11).format("hA"),
         "description":""
 
     },
     {
-        "id":"12",
-        "time": moment().set("hour", 12).set("minute", 0).set("second", 0).format("hA"),
+        "time": moment().hour(12).format("hA"),
         "description":""
 
     },
     {
-        "id":"1",
-        "time": moment().set("hour", 13).set("minute", 0).set("second", 0).format("hA"),
+        "time": moment().hour(13).format("hA"),
         "description":""
 
     },
     {
-        "id":"2",
-        "time": moment().set("hour", 14).set("minute", 0).set("second", 0).format("hA"),
+        "time": moment().hour(14).format("hA"),
         "description":""
 
     },
     {
-        "id":"3",
-        "time": moment().set("hour", 15).set("minute", 0).set("second", 0).format("hA"),
+        "time": moment().hour(15).format("hA"),
         "description":""
 
     },
     {
-        "id":"4",
-        "time": moment().set("hour", 16).set("minute", 0).set("second", 0).format("hA"),
+        "time": moment().hour(16).format("hA"),
         "description":""
 
     },
     {
-        "id":"5",
-        "time": moment().set("hour", 17).set("minute", 0).set("second", 0).format("hA"),
+        "time": moment().hour(17).format("hA"),
         "description":""
 
     },
 ];
 
 
-events.forEach(function(hour){
+
+// load current date at the top of the page
+var today = moment().format("dddd, MMMM Do");
+$("#currentDay").text(today);
+
+// loadEvents function - pull from array from local storage
+
+// create timeblock elements
+for (var i = 0; i< events.length; i++){
     var timeBlockEl = $("<div>")
         .addClass("row time-block");
 
     var hourEl = $("<div>")
         .addClass("col-1 hour")
-        .text(hour.time);
+        .text(events[i].time);
 
     var descriptionEl = $("<textarea>")
         .addClass("col-10 description")
-        .text(hour.description)
+        .text(events[i].description)
+       
+        var hour = moment(events[i].time, "hA").hour();
+
+        if (now > hour){
+            descriptionEl.addClass("past");
+        } else if (now === hour){
+            descriptionEl.addClass("present");
+        } else {
+            descriptionEl.addClass("future");
+        };
 
     var saveBtnEl = $("<button>")
         .addClass("col-1 saveBtn")
@@ -73,13 +85,7 @@ events.forEach(function(hour){
 
     timeBlockEl.append(hourEl, descriptionEl, saveBtnEl);
     $(".container").append(timeBlockEl);
-});
-
-// load current date at the top of the page
-var today = moment().format("dddd, MMMM Do");
-$("#currentDay").text(today);
-
-// loadEvents function - pull from array from local storage
+};
 
 // saveEvent function - save to local storage
 
