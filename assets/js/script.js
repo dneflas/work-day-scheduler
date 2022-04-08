@@ -1,50 +1,32 @@
 var now = moment().hour();
-console.log(now);
 
 var events = [
-    {
-        "time": moment().hour(9).format("hA"),
+    {   
         "description":""
     },
     {
-        "time": moment().hour(10).format("hA"),
         "description":""
-
     },
     {
-        "time": moment().hour(11).format("hA"),
         "description":""
-
     },
     {
-        "time": moment().hour(12).format("hA"),
         "description":""
-
     },
     {
-        "time": moment().hour(13).format("hA"),
         "description":""
-
     },
     {
-        "time": moment().hour(14).format("hA"),
         "description":""
-
     },
     {
-        "time": moment().hour(15).format("hA"),
         "description":""
-
     },
     {
-        "time": moment().hour(16).format("hA"),
         "description":""
-
     },
     {
-        "time": moment().hour(17).format("hA"),
         "description":""
-
     },
 ];
 
@@ -54,60 +36,91 @@ $("#currentDay").text(today);
 
 // loadEvents function - pull from array from local storage
 var loadEvents = function(){
-    storedEvents = JSON.parse(localStorage.getItem("events"));
+    storedEvents = JSON.parse(localStorage.getItem("storedEvents"));
 
     if(!storedEvents) {
         storedEvents = events;
-    };
+    } else {
+        events = storedEvents;
+    }
 
-    createTimeblock(storedEvents);
+    createTimeblock(events);
 }
 
 // create timeblock elements
 var createTimeblock = function(arr){
-    for (var i = 0; i< arr.length; i++){
-        var timeBlockEl = $("<div>")
-            .addClass("row time-block");
+    for (var i = 0; i < 9; i++){
+        // var timeBlockEl = $("<div>")
+        //     .addClass("row time-block")
 
         var hourEl = $("<div>")
             .addClass("col-1 hour")
-            .text(arr[i].time);
+            .text(moment().hour(i+9).format("hA"));
 
         var descriptionEl = $("<textarea>")
             .addClass("col-10 description")
-            .text(arr[i].description)
+            .attr("id", "description-" + (i))
+            .text(arr[i].description);
 
-            var hour = moment(arr[i].time, "hA").hour();
-            descriptionEl.removeClass("past present future");
-
-            if (now > hour){
-                descriptionEl.addClass("past");
-            } else if (now === hour){
-                descriptionEl.addClass("present");
-            } else {
-                descriptionEl.addClass("future");
-            };
-        
         var saveBtnEl = $("<button>")
             .addClass("col-1 saveBtn")
+            .attr("id", "btn-" + (i))
             .html("<i class='fas fa-save'></i>")
 
-        timeBlockEl.append(hourEl, descriptionEl, saveBtnEl);
-        $(".container").append(timeBlockEl);
+        $("#time-block-" + i).append(hourEl, descriptionEl, saveBtnEl);
+        // $(".container").append(timeBlockEl);
+
+        $(".time-block").removeClass("past present future");
+        var hour = moment(hourEl.text(), "hA").hour();
+
+        if (now > hour){
+            descriptionEl.addClass("past");
+        } else if (now === hour){
+            descriptionEl.addClass("present");
+        } else {
+            descriptionEl.addClass("future");
+        };  
     };
 };
 
 // saveEvent function - save to local storage
 var saveEventHandler = function(){
-    localStorage.setItem("storedEvents", JSON.stringify(storedEvents));
+    //update descriptions
+    var updatedEvent = 
+
+
+    localStorage.setItem("storedEvents", JSON.stringify(events));
     console.log("saved to local storage")
 }
+
 
 // auditEvent function - add class to change background color (past, present, future)
 
 
-// event listener for saveBtn to run saveEvent
-$(".container").on("click", ".saveBtn", saveEventHandler);
+// event listener for saveBtn to  to update text and run saveEvent
+$(".time-block").on("click", ".saveBtn", saveEventHandler);
+    // var buttonId = $(this).attr("id");
+    // var index = buttonId.replace("btn-", "");
+    // console.log(index);
+// });
+
+// update array with new event
+$(".time-block").on("change", ".description", function(){
+    var updatedEvent = $(this).val();
+    var textAreaId = $(this).attr("id");
+    var index = textAreaId.replace("description-", "");
+
+    events[index].description = updatedEvent;
+
+
+    // $(".time-block").on("click", ".saveBtn", function(){
+    //     var index = $(this).attr("id").replace
+    //     events[index].description = updatedEvent;
+    //     saveEventHandler();
+    // });
+
+    // update array with new event
+})
 
 // timeInterval - to auditEvent every hour (1000* 60 * 60)
 
