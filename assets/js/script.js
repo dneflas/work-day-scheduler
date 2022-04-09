@@ -1,5 +1,4 @@
 var now = moment().hour();
-
 var events = [
     {   
         "description":""
@@ -29,7 +28,6 @@ var events = [
         "description":""
     },
 ];
-
 var tempEvents = [
     {   
         "description":""
@@ -109,11 +107,9 @@ var createTimeblock = function(arr){
 
 // saveEvent function - save to local storage
 var saveEventHandler = function(){
-    //update descriptions
-
     localStorage.setItem("storedEvents", JSON.stringify(events));
     console.log("saved to local storage")
-}
+};
 
 // event listener for saveBtn to  to update events of array and run saveEvent
 $(".time-block").on("click", ".saveBtn", function(){
@@ -127,11 +123,8 @@ $(".time-block").on("change", ".description", function(){
     var updatedEvent = $(this).val();
     var textAreaId = $(this).attr("id");
     var index = textAreaId.replace("description-", "");
-
     tempEvents[index].description = updatedEvent;
 });
-
-// setInterval - to auditEvent every hour (1000* 60 * 60)
 
 //call loadEvent for the first time
 loadEvents();
