@@ -13,8 +13,7 @@ Work Day Scheduler is a daily planner application. It features color-coded time 
 - Google Fonts
 - Moment.js
 
-## Screenshot
+## Deployed Application
 ![screenshot of work day scheduler application](./assets/images/Screenshot.png)
 
-## Link
 https://dneflas.github.io/work-day-scheduler/
